@@ -1,9 +1,6 @@
 ﻿using BlToast.Services;
 using Microsoft.AspNetCore.Components;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BlToast.Components
 {
@@ -11,6 +8,15 @@ namespace BlToast.Components
     {
         [Inject] public ToastService ToastService { get; set; }
 
+        public string Heading { get; private set; }
+        public string BackgroundCssClass { get; private set; }
+        public string IconCssClass { get; private set; }
+        public string VisibleCssClass { get; private set; }
+
+        public string Message { get; set; }
+
+        //Flag to suppress the showing of the component markup until the 
+        //ToastService.Show event is raised.
         public bool ShouldShow = false;
 
         protected override void OnInitialized()
@@ -18,15 +24,50 @@ namespace BlToast.Components
             ToastService.Show += OnShow;
         }
 
-        private void OnShow()
+        protected virtual void OnShow(Object sender, ShowEventArgs e)
         {
-            ShouldShow = true;
+            BuildToastSettings(e.ToastLevel, e.Message);
             base.InvokeAsync(StateHasChanged);
         }
 
         public void Dispose()
         {
             ToastService.Show -= OnShow;
+        }
+
+        private void BuildToastSettings(ToastLevel level, string message)
+        {
+            switch (level)
+            {
+                case ToastLevel.Info:
+                    BackgroundCssClass = "bg-info";
+                    IconCssClass = "info";
+                    Heading = "Info";
+                    break;
+                case ToastLevel.Success:
+                    BackgroundCssClass = "bg-success";
+                    IconCssClass = "check";
+                    Heading = "Success";
+                    break;
+                case ToastLevel.Warning:
+                    BackgroundCssClass = "bg-warning";
+                    IconCssClass = "exclamation";
+                    Heading = "Warning";
+                    break;
+                case ToastLevel.Error:
+                    BackgroundCssClass = "bg-danger";
+                    IconCssClass = "times";
+                    Heading = "Error";
+                    break;
+            }
+
+            //Toggles between two identical css classes and animations, causing the browser to rerun the 
+            //animation.
+            VisibleCssClass = VisibleCssClass == null || VisibleCssClass == "toast-visible1"
+                ? "toast-visible" : "toast-visible1";
+
+            Message = message;
+            ShouldShow = true;
         }
     }
 }
