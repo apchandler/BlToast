@@ -1,0 +1,14 @@
+﻿@inherits ToastBase
+
+@if (ShouldShow)
+{
+<div class="toast @ToastService.VisibleCssClass @ToastService.BackgroundCssClass">
+    <div class="toast-icon">
+        <i class="fa fa-@ToastService.IconCssClass" aria-hidden="true"></i>
+    </div>
+    <div class="toast-body">
+        <h5>@ToastService.Heading</h5>
+        <p>@ToastService.Message</p>
+    </div>
+</div>
+}
