@@ -25,4 +25,3 @@ type of notification in a toast like popup on the page.  For the demo, this will
 but not the *Fetch Data* page.  I wanted to distinguish showing on various portions of an application.
 
 To accomplish this, the following code items must be set:
-* `services.AddSingleton<ToastService>();` in the Startup.cs file.
