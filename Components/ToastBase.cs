@@ -24,10 +24,20 @@ namespace BlToast.Components
             ToastService.Show += OnShow;
         }
 
+        //Must contain the call the to base.InvokeAsync() method for the MVC call
+        //To cross from the component thread to the MVC thread and call out to the 
+        //other registered components.
         protected virtual void OnShow(Object sender, ShowEventArgs e)
         {
             BuildToastSettings(e.ToastLevel, e.Message);
+            
+            //Need to call this way when using service.AddSingleton for global app state
+            //-- see comments above.
             base.InvokeAsync(StateHasChanged);
+
+            //Can uncomment and use if the ToastService is using AddScoped for a 
+            //Client scoped object.
+            //StateHasChanged();
         }
 
         public void Dispose()
