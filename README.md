@@ -31,3 +31,12 @@ To accomplish this, the following code items must be set:
 - __ToastBase.cs must contain the `base.InvokeAsync(StateHasChanged)` call in the OnShow() event handler.__
   - You will get a javascript error regarding invoke on the thread.  This will fix the issue by allowing the Blazor component
   thread to hand off the event asynchrounously to the MVC event thread for dispatch.
+
+#### Send a Toast Notification from the Client or server to one connected client
+This means that each client, when clicking the notification buttons, will only post notifications to their client.  This also means that when the Show event from the ToastService is raised server side, it will also show for that one client.
+
+To accomplish this, the following code items must be set:
+- __`services.AddScoped<ToastService>()` in the Startup.cs file.__  This is for a client scoped Application State object.
+- __ToastBase.cs can call `StateHasChanged()` directly or contain the `base.InvokeAsync(StateHasChanged)` call in the OnShow() event handler.__
+ 
+I hope this helps someone understand this a little better.  Thank you Chris Saintly for the information to get started.
