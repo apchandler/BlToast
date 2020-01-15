@@ -12,7 +12,7 @@ namespace BlToast.Services
         }
     }
 
-    public class ShowEventArgs : EventArgs
+    public struct ShowEventArgs
     {
         public string Message { get; set; }
         public ToastLevel ToastLevel { get; set; }
